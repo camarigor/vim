@@ -157,3 +157,7 @@ let g:ale_cpp_clang_executable = "/usr/local/eosio.cdt/bin/clang-7"
 let g:ale_cpp_clang_options = "-std=c++14 -ferror-limit=0 -I/usr/local/eosio.cdt/include -I/usr/local/eosio.cdt/include/libcxx -I/usr/local/eosio.cdt/include/libc"
 let g:ale_linters_explicit = 1
 
+"---------------TERRAFORM-
+let g:terraform_align=1
+let g:terraform_fold_sections=1
+let g:terraform_fold_sections=1
