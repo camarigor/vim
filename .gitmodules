@@ -43,3 +43,6 @@
 [submodule "catppuccin-vim"]
         path = bundle/vim-catppuccin
         url = https://github.com/catppuccin/vim.git
+[submodule "bundle/catppuccin-vim"]
+	path = bundle/catppuccin-vim
+	url = git@github.com:catppuccin/vim.git
