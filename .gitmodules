@@ -40,4 +40,6 @@
 [submodule "vim-terraform"]
         path = bundle/vim-terraform
         url = https://github.com/hashivim/vim-terraform.git
-
+[submodule "catppuccin-vim"]
+        path = bundle/vim-catppuccin
+        url = https://github.com/catppuccin/vim.git
