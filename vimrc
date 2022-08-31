@@ -50,6 +50,7 @@ set list listchars=tab:\~\ ,trail:~
 set statusline=%{expand('%:h')}/%t\ [%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ %h%m%r%y%=%c,%l/%L\ %P
 " always display statusline
 set laststatus=2
+set termguicolors
 
 augroup abi
   au!
