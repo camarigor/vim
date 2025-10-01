@@ -29,6 +29,21 @@ set complete=.,w,b,u
 " putting all swap and backup files on a specific folder
 set dir=$HOME/.vim/swp/
 set bdir=$HOME/.vim/bkp/
+" criar diretórios se não existirem
+if !isdirectory($HOME . '/.vim/swp')
+    call mkdir($HOME . '/.vim/swp', 'p', 0700)
+endif
+if !isdirectory($HOME . '/.vim/bkp')
+    call mkdir($HOME . '/.vim/bkp', 'p', 0700)
+endif
+" undo persistente
+if has('persistent_undo')
+    set undofile
+    set undodir=$HOME/.vim/undo/
+    if !isdirectory(&undodir)
+        call mkdir(&undodir, 'p', 0700)
+    endif
+endif
 " automatically re-read file changed outside vim
 set autoread
 " look for tags in custom locations
@@ -51,12 +66,46 @@ set statusline=%{expand('%:h')}/%t\ [%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ %h%m
 " always display statusline
 set laststatus=2
 set termguicolors
+" performance improvements
+set lazyredraw
+set ttyfast
+set synmaxcol=200
+" navigation improvements
+set scrolloff=8
+set sidescrolloff=8
+" wildmenu improvements
+set wildmenu
+set wildmode=longest:full,full
+set wildignore+=*.o,*.obj,*.pyc,*.swp,*.bak,*.class,*/.git/*,*/node_modules/*
+" split behavior
+set splitbelow
+set splitright
+" timeout settings
+set timeoutlen=500
+set ttimeoutlen=10
+" text formatting
+set textwidth=0
+set wrap
+set linebreak
+set breakindent
+" security
+set nomodeline
+set secure
 
 augroup abi
   au!
   autocmd BufNewFile,BufRead *.abi set filetype=json
 augroup END
-autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --fix %
+
+augroup AutoFormat
+  autocmd!
+  autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --fix %
+augroup END
+
+augroup checktime
+  autocmd!
+  autocmd FocusGained,BufEnter * checktime
+augroup END
 
 "------------MAPPINGS-
 nnoremap - :Ex<CR>
@@ -70,7 +119,7 @@ nnoremap <Leader>st :tabe $MYVIMRC<CR>
 nnoremap <Leader>sz :source $MYVIMRC<CR>
 nnoremap <Leader><Space> :nohlsearch<CR>
 nnoremap <Leader>Q :qa<CR>
-nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
+nnoremap <Leader>W :w !sudo tee % >/dev/null<CR>:e!<CR>
 nnoremap <Leader>h :vertical resize +5<CR>
 nnoremap <Leader>j :resize -5<CR>
 nnoremap <Leader>k :resize +5<CR>
@@ -80,6 +129,18 @@ nnoremap <Leader>ss :mksession! ~/.vim/sessions/
 nnoremap <Leader>w :w<CR>
 nnoremap P :pu<CR>
 nnoremap Y y$
+" melhor indentação em modo visual
+vnoremap < <gv
+vnoremap > >gv
+" centralizar ao buscar
+nnoremap n nzzzv
+nnoremap N Nzzzv
+" mover linhas selecionadas
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+" quickfix navigation
+nnoremap <C-n> :cnext<CR>
+nnoremap <C-p> :cprev<CR>
 " Use | and _ to split windows (while preserving original behaviour of [count]bar and [count]_).
 nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>normal! 0".v:count."<Bar><CR>"
 nnoremap <expr><silent> _ v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
@@ -160,5 +221,4 @@ let g:ale_linters_explicit = 1
 
 "---------------TERRAFORM-
 let g:terraform_align=1
-let g:terraform_fold_sections=1
 let g:terraform_fold_sections=1
